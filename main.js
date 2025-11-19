@@ -8,7 +8,7 @@ const products = [
         category: "decorative",
         weight: 150,
         colors: 1,
-        price: 80,
+        price: 95,
         image: "resources/product1.png",
         description: "Escultura moderna com formas hexagonais interconectadas"
     },
@@ -18,7 +18,7 @@ const products = [
         category: "utility",
         weight: 85,
         colors: 2,
-        price: 47.5,
+        price: 55,
         image: "resources/product2.png",
         description: "Suporte ergonômico com design dual-tone"
     },
@@ -28,7 +28,7 @@ const products = [
         category: "mechanical",
         weight: 200,
         colors: 1,
-        price: 105,
+        price: 120,
         image: "resources/product3.png",
         description: "Conjunto de engrenagens com precisão mecânica"
     },
@@ -38,7 +38,7 @@ const products = [
         category: "decorative",
         weight: 120,
         colors: 1,
-        price: 65,
+        price: 80,
         image: "resources/product4.png",
         description: "Vaso com padrão em espiral elegante"
     },
@@ -48,7 +48,7 @@ const products = [
         category: "architectural",
         weight: 300,
         colors: 1,
-        price: 155,
+        price: 170,
         image: "resources/product5.png",
         description: "Maquete detalhada para projetos arquitetônicos"
     },
@@ -58,7 +58,7 @@ const products = [
         category: "personal",
         weight: 25,
         colors: 4,
-        price: 26.25,
+        price: 30,
         image: "resources/product6.png",
         description: "Chaveiro colorido com texto personalizado"
     },
@@ -68,7 +68,7 @@ const products = [
         category: "toy",
         weight: 180,
         colors: 2,
-        price: 95,
+        price: 110,
         image: "resources/product7.png",
         description: "Figura colecionável com juntas articuladas"
     },
@@ -78,7 +78,7 @@ const products = [
         category: "luxury",
         weight: 90,
         colors: 1,
-        price: 50,
+        price: 65,
         image: "resources/product8.png",
         description: "Caixa decorativa com padrões filigranados"
     }
@@ -260,7 +260,7 @@ class CostCalculator {
                                 <span>R$ ${PRICING.baseFee.toFixed(2)}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span>Material (${weight}g × ${colors === 1 ? 'R$0.50' : 'R$0.75'}):</span>
+                                <span>Material (${weight}g × ${colors === 1 ? 'R$0.50' : 'R$1.00'}):</span>
                                 <span>R$ ${(weight * (colors === 1 ? PRICING.singleColor : PRICING.multiColor)).toFixed(2)}</span>
                             </div>
                             <div class="border-t pt-1 flex justify-between font-semibold text-blue-800">
