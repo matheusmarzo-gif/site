@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos - 3D Print Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0891b2;
+            --secondary: #ffffff;
+            --accent: #10b981;
+            --dark: #374151;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+        
+        .font-title {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px) rotateY(5deg);
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .animate-fade-in-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .filter-btn.active {
+            background: var(--primary) !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-green-500 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">3D</span>
+                    </div>
+                    <span class="font-title font-bold text-xl text-gray-800">PrintPro</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Início</a>
+                    <a href="produtos.html" class="nav-link text-blue-600 font-medium">Produtos</a>
+                    <a href="index.html#calculator" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Calculadora</a>
+                    <a href="index.html#quote" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Orçamento</a>
+                    <a href="portfolio.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Portfólio</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-gray-700 hover:text-blue-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h8m-8 0V19a2 2 0 002 2h4a2 2 0 002-2v-1"></path>
+                        </svg>
+                        <span id="quote-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" style="display: none;">0</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-12 bg-gradient-to-br from-blue-50 to-green-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center">
+                <h1 class="font-title font-bold text-5xl text-gray-800 mb-4">Nossos Produtos</h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Descubra nosso catálogo completo de produtos impressos em 3D com alta qualidade e acabamento profissional
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button onclick="filterProducts('all')" class="filter-btn active bg-blue-500 text-white px-6 py-3 rounded-full font-medium transition-all duration-300 hover:transform hover:scale-105 shadow-lg">
+                    Todos
+                </button>
+                <button onclick="filterProducts('decorative')" class="filter-btn bg-white text-gray-700 px-6 py-3 rounded-full font-medium transition-all duration-300 hover:transform hover:scale-105 shadow-lg hover:bg-blue-500 hover:text-white">
+                    Decoração
+                </button>
+                <button onclick="filterProducts('utility')" class="filter-btn bg-white text-gray-700 px-6 py-3 rounded-full font-medium transition-all duration-300 hover:transform hover:scale-105 shadow-lg hover:bg-blue-500 hover:text-white">
+                    Utilidades
+                </button>
+                <button onclick="filterProducts('mechanical')" class="filter-btn bg-white text-gray-700 px-6 py-3 rounded-full font-medium transition-all duration-300 hover:transform hover:scale-105 shadow-lg hover:bg-blue-500 hover:text-white">
+                    Mecânicos
+                </button>
+                <button onclick="filterProducts('architectural')" class="filter-btn bg-white text-gray-700 px-6 py-3 rounded-full font-medium transition-all duration-300 hover:transform hover:scale-105 shadow-lg hover:bg-blue-500 hover:text-white">
+                    Arquitetura
+                </button>
+                <button onclick="filterProducts('personal')" class="filter-btn bg-white text-gray-700 px-6 py-3 rounded-full font-medium transition-all duration-300 hover:transform hover:scale-105 shadow-lg hover:bg-blue-500 hover:text-white">
+                    Personalizados
+                </button>
+                <button onclick="filterProducts('toy')" class="filter-btn bg-white text-gray-700 px-6 py-3 rounded-full font-medium transition-all duration-300 hover:transform hover:scale-105 shadow-lg hover:bg-blue-500 hover:text-white">
+                    Brinquedos
+                </button>
+                <button onclick="filterProducts('luxury')" class="filter-btn bg-white text-gray-700 px-6 py-3 rounded-full font-medium transition-all duration-300 hover:transform hover:scale-105 shadow-lg hover:bg-blue-500 hover:text-white">
+                    Luxo
+                </button>
+            </div>
+            
+            <!-- Products Grid -->
+            <div id="products-grid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Products will be loaded by JavaScript -->
+            </div>
+            
+            <!-- Loading Message -->
+            <div id="loading-message" class="text-center py-12">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <p class="mt-4 text-gray-600">Carregando produtos...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote CTA Section -->
+    <section class="py-16 bg-gradient-to-br from-blue-600 to-green-600">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="font-title font-bold text-4xl text-white mb-4">Não encontrou o que procura?</h2>
+            <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                Entre em contato para projetos personalizados e orçamentos especiais
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="index.html#quote" class="bg-white text-blue-600 font-semibold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    Solicitar Orçamento
+                </a>
+                <a href="portfolio.html" class="bg-transparent border-2 border-white text-white font-semibold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105">
+                    Ver Portfólio
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-green-500 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">3D</span>
+                        </div>
+                        <span class="font-title font-bold text-xl">PrintPro</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Transformando ideias em realidade através da impressão 3D profissional.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Serviços</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="produtos.html" class="hover:text-white transition-colors">Impressão 3D</a></li>
+                        <li><a href="index.html#calculator" class="hover:text-white transition-colors">Cotação Online</a></li>
+                        <li><a href="index.html#quote" class="hover:text-white transition-colors">Projetos Personalizados</a></li>
+                        <li><a href="portfolio.html" class="hover:text-white transition-colors">Portfólio</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Materiais</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>PLA (Poliácido Láctico)</li>
+                        <li>ABS (Acrilonitrila Butadieno Estireno)</li>
+                        <li>PETG (Polietileno Tereftalato)</li>
+                        <li>Cores Personalizadas</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Contato</h4>
+                    <div class="space-y-2 text-sm text-gray-400">
+                        <p>📧 contato@3dprintpro.com</p>
+                        <p>📱 (00) 00000-0000</p>
+                        <p>🕒 Seg-Sex: 9h às 18h</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; 2024 3D Print Pro. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize products grid
+            ProductManager.renderProducts('products-grid');
+            
+            // Hide loading message
+            setTimeout(() => {
+                document.getElementById('loading-message').style.display = 'none';
+            }, 500);
+            
+            // Initialize scroll animations
+            initializeScrollAnimations();
+        });
+        
+        // Override filter function for this page
+        function filterProducts(category) {
+            ProductManager.renderProducts('products-grid', category);
+            
+            // Update filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-500', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-700');
+            });
+            
+            const activeBtn = document.querySelector(`[onclick="filterProducts('${category}')"]`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-white', 'text-gray-700');
+                activeBtn.classList.add('active', 'bg-blue-500', 'text-white');
+            }
+        }
+        
+        // Initialize scroll animations
+        function initializeScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in-up');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.scroll-reveal').forEach(el => {
+                observer.observe(el);
+            });
+        }
+    </script>
+</body>
+</html>

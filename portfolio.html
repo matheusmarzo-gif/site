@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio - 3D Print Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0891b2;
+            --secondary: #ffffff;
+            --accent: #10b981;
+            --dark: #374151;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+        
+        .font-title {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .portfolio-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .portfolio-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .animate-fade-in-up {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        
+        .modal-content {
+            position: relative;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 20px;
+        }
+        
+        .modal-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+        
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-green-500 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">3D</span>
+                    </div>
+                    <span class="font-title font-bold text-xl text-gray-800">PrintPro</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Início</a>
+                    <a href="produtos.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Produtos</a>
+                    <a href="index.html#calculator" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Calculadora</a>
+                    <a href="index.html#quote" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Orçamento</a>
+                    <a href="portfolio.html" class="nav-link text-blue-600 font-medium">Portfólio</a>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-gray-700 hover:text-blue-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h8m-8 0V19a2 2 0 002 2h4a2 2 0 002-2v-1"></path>
+                        </svg>
+                        <span id="quote-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" style="display: none;">0</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-12 bg-gradient-to-br from-blue-50 to-green-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center">
+                <h1 class="font-title font-bold text-5xl text-gray-800 mb-4">Nosso Portfólio</h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Conheça alguns dos projetos que realizamos e a qualidade do nosso trabalho
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Categories -->
+    <section class="py-8 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="filterPortfolio('all')" class="filter-portfolio active bg-blue-500 text-white px-6 py-3 rounded-full font-medium transition-all duration-300 hover:transform hover:scale-105 shadow-lg">
+                    Todos
+                </button>
+                <button onclick="filterPortfolio('architectural')" class="filter-portfolio bg-white text-gray-700 px-6 py-3 rounded-full font-medium transition-all duration-300 hover:transform hover:scale-105 shadow-lg hover:bg-blue-500 hover:text-white">
+                    Arquitetura
+                </button>
+                <button onclick="filterPortfolio('product')" class="filter-portfolio bg-white text-gray-700 px-6 py-3 rounded-full font-medium transition-all duration-300 hover:transform hover:scale-105 shadow-lg hover:bg-blue-500 hover:text-white">
+                    Produtos
+                </button>
+                <button onclick="filterPortfolio('mechanical')" class="filter-portfolio bg-white text-gray-700 px-6 py-3 rounded-full font-medium transition-all duration-300 hover:transform hover:scale-105 shadow-lg hover:bg-blue-500 hover:text-white">
+                    Mecânico
+                </button>
+                <button onclick="filterPortfolio('art')" class="filter-portfolio bg-white text-gray-700 px-6 py-3 rounded-full font-medium transition-all duration-300 hover:transform hover:scale-105 shadow-lg hover:bg-blue-500 hover:text-white">
+                    Arte
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Grid -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <div id="portfolio-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Portfolio items will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="py-16 bg-gradient-to-br from-blue-600 to-green-600">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8 text-center text-white">
+                <div class="scroll-reveal">
+                    <div class="text-4xl font-bold mb-2" data-count="500">0</div>
+                    <p class="text-blue-100">Projetos Completos</p>
+                </div>
+                <div class="scroll-reveal">
+                    <div class="text-4xl font-bold mb-2" data-count="95">0</div>
+                    <p class="text-blue-100">% Satisfação</p>
+                </div>
+                <div class="scroll-reveal">
+                    <div class="text-4xl font-bold mb-2" data-count="50">0</div>
+                    <p class="text-blue-100">Clientes Felizes</p>
+                </div>
+                <div class="scroll-reveal">
+                    <div class="text-4xl font-bold mb-2" data-count="3">0</div>
+                    <p class="text-blue-100">Anos de Experiência</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 scroll-reveal">
+                <h2 class="font-title font-bold text-4xl text-gray-800 mb-4">O que nossos clientes dizem</h2>
+                <p class="text-xl text-gray-600">
+                    Feedback de quem já utilizou nossos serviços
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 rounded-lg p-6 scroll-reveal">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                            JM
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800">João Mendes</h4>
+                            <p class="text-sm text-gray-600">Arquiteto</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700">
+                        "Excelente qualidade e precisão nos modelos arquitetônicos. Superou todas as expectativas!"
+                    </p>
+                    <div class="flex text-yellow-400 mt-4">
+                        ★★★★★
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6 scroll-reveal">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
+                            MC
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800">Maria Costa</h4>
+                            <p class="text-sm text-gray-600">Designer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700">
+                        "Atendimento personalizado e produtos de alta qualidade. Recomendo a todos!"
+                    </p>
+                    <div class="flex text-yellow-400 mt-4">
+                        ★★★★★
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6 scroll-reveal">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                            RL
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800">Ricardo Lima</h4>
+                            <p class="text-sm text-gray-600">Engenheiro</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700">
+                        "Prototipagem rápida com precisão dimensional excepcional. Fundamental para nosso desenvolvimento."
+                    </p>
+                    <div class="flex text-yellow-400 mt-4">
+                        ★★★★★
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-green-500 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">3D</span>
+                        </div>
+                        <span class="font-title font-bold text-xl">PrintPro</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Transformando ideias em realidade através da impressão 3D profissional.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Serviços</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="produtos.html" class="hover:text-white transition-colors">Impressão 3D</a></li>
+                        <li><a href="index.html#calculator" class="hover:text-white transition-colors">Cotação Online</a></li>
+                        <li><a href="index.html#quote" class="hover:text-white transition-colors">Projetos Personalizados</a></li>
+                        <li><a href="portfolio.html" class="hover:text-white transition-colors">Portfólio</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Materiais</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>PLA (Poliácido Láctico)</li>
+                        <li>ABS (Acrilonitrila Butadieno Estireno)</li>
+                        <li>PETG (Polietileno Tereftalato)</li>
+                        <li>Cores Personalizadas</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Contato</h4>
+                    <div class="space-y-2 text-sm text-gray-400">
+                        <p>📧 contato@3dprintpro.com</p>
+                        <p>📱 (00) 00000-0000</p>
+                        <p>🕒 Seg-Sex: 9h às 18h</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; 2024 3D Print Pro. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for portfolio images -->
+    <div id="portfolio-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img id="modal-image" class="modal-image" src="" alt="">
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        // Portfolio data
+        const portfolioItems = [
+            {
+                id: 1,
+                title: "Maquete Residencial Moderna",
+                category: "architectural",
+                image: "resources/product5.png",
+                description: "Modelo arquitetônico detalhado de residência moderna com acabamento em PLA branco",
+                client: "Arquitetura Silva & Associados",
+                year: "2024"
+            },
+            {
+                id: 2,
+                title: "Suporte Ergonômico Dual-Tone",
+                category: "product",
+                image: "resources/product2.png",
+                description: "Suporte para smartphone com design inovador e cores personalizadas",
+                client: "Tech Solutions Inc.",
+                year: "2024"
+            },
+            {
+                id: 3,
+                title: "Sistema de Engrenagens Personalizado",
+                category: "mechanical",
+                image: "resources/product3.png",
+                description: "Conjunto de engrenagens com precisão milimétrica para maquinário industrial",
+                client: "Indústrias Mecânicas LTDA",
+                year: "2023"
+            },
+            {
+                id: 4,
+                title: "Escultura Geométrica Contemporânea",
+                category: "art",
+                image: "resources/product1.png",
+                description: "Peça artística moderna com formas geométricas interconectadas",
+                client: "Galeria de Arte Moderna",
+                year: "2024"
+            },
+            {
+                id: 5,
+                title: "Vaso Decorativo em Espiral",
+                category: "art",
+                image: "resources/product4.png",
+                description: "Vaso decorativo com padrão em espiral, peça única para decoração",
+                client: "Decoração Premium",
+                year: "2024"
+            },
+            {
+                id: 6,
+                title: "Chaveiros Corporativos",
+                category: "product",
+                image: "resources/product6.png",
+                description: "Série de chaveiros personalizados para evento corporativo",
+                client: "Eventos & Marketing",
+                year: "2023"
+            },
+            {
+                id: 7,
+                title: "Protótipo de Robô",
+                category: "mechanical",
+                image: "resources/product7.png",
+                description: "Protótipo funcional de robô com juntas articuladas",
+                client: "Startup Robotics",
+                year: "2024"
+            },
+            {
+                id: 8,
+                title: "Caixa de Joias Filigranada",
+                category: "art",
+                image: "resources/product8.png",
+                description: "Caixa decorativa com padrões filigranados para joias finas",
+                client: "Joalheria Artesanal",
+                year: "2024"
+            },
+            {
+                id: 9,
+                title: "Miniatura de Edifício Comercial",
+                category: "architectural",
+                image: "resources/product5.png",
+                description: "Modelo em escala de edifício comercial de 30 andares",
+                client: "Construtora Metropolitan",
+                year: "2023"
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPortfolio('all');
+            initializeScrollAnimations();
+            initializeCounters();
+        });
+
+        function renderPortfolio(category = 'all') {
+            const container = document.getElementById('portfolio-grid');
+            const filteredItems = category === 'all' 
+                ? portfolioItems 
+                : portfolioItems.filter(item => item.category === category);
+
+            container.innerHTML = filteredItems.map(item => `
+                <div class="portfolio-item bg-white rounded-lg shadow-lg overflow-hidden scroll-reveal" onclick="openModal('${item.image}', '${item.title}')">
+                    <div class="relative">
+                        <img src="${item.image}" alt="${item.title}" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            ${getCategoryName(item.category)}
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-title font-semibold text-xl text-gray-800 mb-2">${item.title}</h3>
+                        <p class="text-gray-600 text-sm mb-4">${item.description}</p>
+                        <div class="flex justify-between items-center text-sm text-gray-500">
+                            <span>Cliente: ${item.client}</span>
+                            <span>${item.year}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getCategoryName(category) {
+            const names = {
+                'architectural': 'Arquitetura',
+                'product': 'Produto',
+                'mechanical': 'Mecânico',
+                'art': 'Arte'
+            };
+            return names[category] || category;
+        }
+
+        function filterPortfolio(category) {
+            renderPortfolio(category);
+            
+            // Update filter buttons
+            document.querySelectorAll('.filter-portfolio').forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-500', 'text-white');
+                btn.classList.add('bg-white', 'text-gray-700');
+            });
+            
+            const activeBtn = document.querySelector(`[onclick="filterPortfolio('${category}')"]`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-white', 'text-gray-700');
+                activeBtn.classList.add('active', 'bg-blue-500', 'text-white');
+            }
+        }
+
+        function openModal(imageSrc, title) {
+            const modal = document.getElementById('portfolio-modal');
+            const modalImg = document.getElementById('modal-image');
+            
+            modal.style.display = 'block';
+            modalImg.src = imageSrc;
+            modalImg.alt = title;
+        }
+
+        // Close modal functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('portfolio-modal');
+            const closeBtn = document.querySelector('.close');
+
+            closeBtn.onclick = function() {
+                modal.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        });
+
+        function initializeScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in-up');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.scroll-reveal').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        function initializeCounters() {
+            const counters = document.querySelectorAll('[data-count]');
+            
+            const observerOptions = {
+                threshold: 0.5
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counter = entry.target;
+                        const target = parseInt(counter.getAttribute('data-count'));
+                        animateCounter(counter, target);
+                        observer.unobserve(counter);
+                    }
+                });
+            }, observerOptions);
+
+            counters.forEach(counter => {
+                observer.observe(counter);
+            });
+        }
+
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 40);
+        }
+    </script>
+</body>
+</html>
