@@ -86,9 +86,9 @@ const products = [
 
 // Taxas de impressão
 const PRICING = {
-    baseFee: 5.00,
+    baseFee: 20.00,
     singleColor: 0.50,
-    multiColor: 0.75
+    multiColor: 1.00
 };
 
 // Classe para gerenciar produtos
